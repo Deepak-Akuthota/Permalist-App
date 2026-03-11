@@ -11,7 +11,17 @@ const db = new pg.Client({
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 db.connect();
-db.connect(); 
+const createTableQuery = `
+  CREATE TABLE IF NOT EXISTS items (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    completed BOOLEAN DEFAULT false
+  );
+`;
+
+db.query(createTableQuery)
+  .then(() => console.log("Database table 'items' is ready!"))
+  .catch((err) => console.error("Error creating table:", err));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
