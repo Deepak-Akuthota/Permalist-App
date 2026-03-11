@@ -1,0 +1,109 @@
+<%- include('partials/header.ejs'); -%>
+
+  <div class="box" id="heading">
+    <h1>
+      <%= listTitle %>
+    </h1>
+  </div>
+  
+  <div class="box">
+    
+    <% if (!listItems || listItems.length === 0) { %>
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 30px; text-align: center;">
+        <svg style="width: 70px; height: 70px; margin-bottom: 20px;" viewBox="0 0 24 24" fill="none" stroke="#a683e3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M9 12l2 2 4-4"></path>
+        </svg>
+        <h3 style="margin: 0 0 10px 0; color: #2d3748; font-size: 24px;">All caught up!</h3>
+        <p style="margin: 0; color: #8a94a6; font-size: 16px;">You have no tasks left for today.</p>
+      </div>
+
+    <% } else { %>
+      <% for(let i = 0; i < listItems.length; i++) { %>
+        <% let item = listItems[i]; %>
+        
+        <div class="item" style="animation-delay: <%= i * 0.05 %>s;">
+          
+          <input type="checkbox" id="checkbox<%=item.id%>" onchange="toggleStrike('<%=item.id%>')" <%= item.completed ? 'checked' : '' %>>
+
+          <p id="title<%=item.id%>" style="<%= item.completed ? 'text-decoration: line-through; color: gray;' : '' %>">
+            <%= item.title %>
+          </p>
+
+          <form class="edit" action="/edit" method="post">
+            <input type="hidden" name="updatedItemId" value="<%= item.id %>">
+            <input id="input<%=item.id%>" type="text" name="updatedItemTitle" value="<%= item.title %>" autocomplete="off" autofocus="true" hidden="true" />
+            <button id="done<%=item.id%>" class="edit" type="submit" hidden>
+              <img class="icon" src="/assets/icons/check-solid.svg" alt="tick image">
+            </button>
+          </form>
+          
+          <button id="edit<%=item.id%>" class="edit" onclick="handler('<%=item.id%>')">
+            <img class="icon" src="/assets/icons/pencil-solid.svg" alt="pencil image">
+          </button>
+
+          <form action="/delete" method="post" style="display: inline-block; margin-left: 10px;">
+            <input type="hidden" name="deleteItemId" value="<%= item.id %>">
+            <button type="submit" style="background: none; border: none; cursor: pointer; color: #ff6b6b; font-weight: bold; font-size: 1.2rem;">X</button>
+          </form>
+        </div>
+      <% } %>
+    <% } %>
+
+    <form class="item" action="/add" method="post" style="border-radius: 0 0 16px 16px; border-bottom: none;">
+      <input type="text" name="newItem" placeholder="New Item" autocomplete="off" autofocus="true" />
+      <button class="add" type="submit" name="list" value="<%= listTitle %>" >+</button>
+    </form>
+  </div>
+
+  <div id="celebration-popup">
+    <h2>Nice! 🎉</h2>
+    <p>You completed a task.</p>
+  </div>
+
+  <script>
+    function handler(id) {
+      document.getElementById("title" + id).setAttribute("hidden", true);
+      document.getElementById("edit" + id).setAttribute("hidden", true);
+      document.getElementById("done" + id).removeAttribute("hidden");
+      document.getElementById("input" + id).removeAttribute("hidden");
+    }
+
+    async function toggleStrike(id) {
+      const checkbox = document.getElementById("checkbox" + id);
+      const title = document.getElementById("title" + id);
+      const isCompleted = checkbox.checked;
+      
+      if (isCompleted) {
+        title.style.textDecoration = "line-through";
+        title.style.color = "gray";
+
+        // === SHOW THE POP-UP ===
+        const popup = document.getElementById("celebration-popup");
+        popup.classList.add("show-popup");
+
+        // Automatically hide the pop-up after 2.5 seconds
+        setTimeout(() => {
+          popup.classList.remove("show-popup");
+        }, 2500);
+
+      } else {
+        title.style.textDecoration = "none";
+        title.style.color = "inherit";
+      }
+
+      try {
+        await fetch('/toggle', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: id, completed: isCompleted })
+        });
+      } catch (error) {
+        console.error("Error updating database:", error);
+      }
+    }
+  </script>
+
+<%- include('partials/footer.ejs'); -%>

@@ -1,0 +1,365 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+/* 1. The Floating Orbs Background */
+/* --- Cascading Gradient Background --- */
+@keyframes cascadeBg {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  
+  /* The Gradient Palette */
+  background: linear-gradient(
+    120deg, 
+    #e4e9fd, 
+    #a683e3, 
+    #8ec5fc, 
+    #e0c3fc, 
+    #f4e8ff
+  );
+  
+  /* Stretches the background so we can pan across it */
+  background-size: 300% 300%;
+  
+  /* Runs the cascade animation endlessly */
+  animation: cascadeBg 12s ease infinite;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* 2. The Glassmorphism Box */
+.box {
+  width: 100%;
+  max-width: 450px;
+  margin: 20px auto;
+  border-radius: 16px;
+  overflow: hidden; 
+  
+  /* Frosted Glass Effect */
+  background: rgba(255, 255, 255, 0.65); /* Semi-transparent white */
+  backdrop-filter: blur(12px); /* Blurs the background behind it */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.8); /* Subtle glowing edge */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* Soft outer shadow */
+}
+
+#heading {
+  /* Semi-transparent header to match */
+  background: rgba(166, 131, 227, 0.85);
+  backdrop-filter: blur(5px);
+  padding: 25px 20px;
+  text-align: center;
+  margin: 0;
+  border-bottom: none;
+}
+
+#heading h1 {
+  margin: 0;
+  color: white;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 3. Task Slide-in & Hover Lift Animations */
+@keyframes slideUpFade {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px) scale(0.98); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  padding: 18px 25px;
+  border-bottom: 1px solid rgba(240, 244, 248, 0.6);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  
+  /* Apply the entrance animation */
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0; 
+}
+
+/* Stagger the entrance so they cascade in
+.item:nth-child(1) { animation-delay: 0.05s; }
+.item:nth-child(2) { animation-delay: 0.1s; }
+.item:nth-child(3) { animation-delay: 0.15s; }
+.item:nth-child(4) { animation-delay: 0.2s; }
+.item:nth-child(5) { animation-delay: 0.25s; } */
+
+/* The Hover Lift Effect */
+.item:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px); /* Lifts the item slightly */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03); /* Adds a tiny shadow under the lifted item */
+  border-radius: 8px; /* Slightly rounds the edges on hover */
+}
+
+.item:last-child {
+  border-bottom: none;
+}
+
+/* 4. The Checkbox "Pop" Animation */
+@keyframes checkPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border: 2px solid #a683e3;
+  border-radius: 6px;
+  margin: 0 15px 0 0;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+input[type="checkbox"]:hover {
+  background-color: #f4f0fa;
+  transform: scale(1.05);
+}
+
+input[type="checkbox"]:checked {
+  background-color: #a683e3;
+  border-color: #a683e3;
+  /* Here is your custom SVG checkmark encoded right into the CSS! */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 14px;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: checkPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+input[type="checkbox"]:checked::after {
+  /* content: '✔'; */
+  color: white;
+  font-size: 16px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* --- Typography & Buttons --- */
+p {
+  margin: 0;
+  font-size: 18px;
+  color: #2d3748;
+  font-weight: 500;
+  flex-grow: 1; 
+  text-align: left;
+  transition: color 0.3s, text-decoration-color 0.3s;
+}
+
+form {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+button {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.2); /* Bouncy hover scale */
+}
+
+button.edit {
+  border: none;
+  background: none;
+  padding: 5px;
+  opacity: 0.5;
+  margin-left: 10px;
+}
+
+button.edit:hover {
+  opacity: 1;
+}
+
+.icon {
+  height: 18px;
+  width: 18px;
+}
+
+form[action="/delete"] button {
+  color: #ff6b6b !important;
+  opacity: 0.6;
+  padding: 5px 10px;
+}
+
+form[action="/delete"] button:hover {
+  opacity: 1;
+  color: #ff4757 !important;
+}
+
+/* --- Add New Item Input --- */
+form.item {
+  padding: 15px 25px;
+  background: rgba(253, 253, 253, 0.7);
+  border-radius: 0 0 16px 16px; /* Rounds the bottom corners to match the box */
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-family: inherit;
+  color: #2d3748;
+  margin-right: 15px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+input[type="text"]::placeholder {
+  color: #a0aec0;
+  font-weight: 400;
+}
+
+button.add {
+  background: linear-gradient(135deg, #a683e3, #8a58d6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(166, 131, 227, 0.5);
+  flex-shrink: 0;
+}
+
+button.add:hover {
+  box-shadow: 0 6px 20px rgba(166, 131, 227, 0.7);
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: white;
+  font-size: 14px;
+}
+
+/* --- Empty State Styling --- */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 30px;
+  text-align: center;
+}
+
+.empty-icon {
+  width: 70px;
+  height: 70px;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.empty-state h3 {
+  margin: 0 0 10px 0;
+  color: #2d3748;
+  font-size: 24px;
+}
+
+.empty-text {
+  margin: 0;
+  color: #8a94a6;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* --- Celebration Pop-Up --- */
+#celebration-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* Centers it and starts it scaled down */
+  transform: translate(-50%, -50%) scale(0.5); 
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  padding: 30px 50px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(166, 131, 227, 0.4);
+  text-align: center;
+  z-index: 9999;
+  
+  /* Hidden by default */
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* This class triggers the pop-up */
+#celebration-popup.show-popup {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#celebration-popup h2 {
+  margin: 0 0 5px 0;
+  color: #a683e3;
+  font-size: 28px;
+}
+
+#celebration-popup p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 16px;
+  text-align: center;
+}
